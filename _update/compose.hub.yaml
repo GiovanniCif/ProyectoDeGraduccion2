@@ -1,0 +1,65 @@
+name: sge-pieri
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Define MYSQL_DATABASE en .env}
+      MYSQL_USER: ${MYSQL_USER:?Define MYSQL_USER en .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Define MYSQL_PASSWORD en .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD en .env}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_spanish_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - sge_network
+
+  api:
+    image: ${DOCKERHUB_USERNAME:?Define DOCKERHUB_USERNAME en .env}/sge-pieri-api:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      ConnectionStrings__DefaultConnection: "Server=db;Port=3306;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD};CharSet=utf8mb4;"
+      Database__ServerVersion: "8.0.36"
+      Jwt__Key: ${JWT_KEY:?Define JWT_KEY en .env}
+      Jwt__Issuer: ${JWT_ISSUER:-SGE.PieriDicacio.API}
+      Jwt__Audience: ${JWT_AUDIENCE:-SGE.PieriDicacio.Client}
+      Jwt__ExpireMinutes: ${JWT_EXPIRE_MINUTES:-120}
+      Seed__AdminPassword: ${ADMIN_PASSWORD:?Define ADMIN_PASSWORD en .env}
+      AllowedOrigins: "http://localhost:${APP_PORT:-8080}"
+    volumes:
+      - api_uploads:/app/wwwroot/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sge_network
+
+  frontend:
+    image: ${DOCKERHUB_USERNAME:?Define DOCKERHUB_USERNAME en .env}/sge-pieri-frontend:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-8080}:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - sge_network
+
+volumes:
+  mysql_data:
+  api_uploads:
+
+networks:
+  sge_network:
+    driver: bridge

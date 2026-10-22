@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Materiales (BOM) | SGE PIERI DICACIO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="assets/img/logo.png" alt="PIERI D'CACIO" class="sidebar-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="display:block;">
+        <div style="display:none;"><h5 class="mb-0">SGE</h5><small>PIERI DICACIO</small></div>
+      </div>
+      <nav class="nav flex-column sidebar-nav">
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="clientes.html">Clientes</a>
+        <a class="nav-link" href="pedidos.html">Pedidos</a>
+        <a class="nav-link" href="pagos.html">Pagos</a>
+        <a class="nav-link" href="inventario.html">Inventario</a>
+        <a class="nav-link active" href="bom.html">Lista de Materiales</a>
+        <a class="nav-link" href="produccion.html">Producción</a>
+        <a class="nav-link" href="empleados.html">Empleados</a>
+        <a class="nav-link" href="usuarios.html">Usuarios</a>
+        <a class="nav-link" href="reportes.html">Reportes</a>
+        <a class="nav-link" href="bitacora.html">Bitácora</a>
+      </nav>
+      <div class="sidebar-footer mt-auto">
+        <div class="small text-white-50 mb-2" id="userInfo">Usuario</div>
+        <button class="btn btn-outline-light btn-sm w-100" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h4 mb-1">Lista de Materiales (BOM)</h1>
+          <p class="text-muted mb-0">Gestiona la relación entre productos terminados e insumos</p>
+        </div>
+        <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">Menú</button>
+      </header>
+
+      <div id="bomAlert" class="alert d-none" role="alert"></div>
+
+      <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Seleccionar Producto Terminado</h2>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Producto Terminado</label>
+              <select class="form-select" id="selectProductoTerminado">
+                <option value="">Seleccione un producto terminado</option>
+              </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button class="btn btn-primary w-100" id="btnCargarBOM">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                Cargar BOM
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4" id="productoInfoSection" style="display: none;">
+        <div class="col-12 col-xl-5">
+          <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-body">
+              <h2 class="h5 mb-3">Agregar Insumo al BOM</h2>
+              <form id="bomForm" class="row g-3">
+                <input type="hidden" id="bomIdProductoTerminado" value="">
+                <div class="col-12">
+                  <label class="form-label">Insumo *</label>
+                  <select class="form-select" id="bomInsumo" required>
+                    <option value="">Seleccione un insumo</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Cantidad Requerida *</label>
+                  <input type="number" step="0.0001" min="0.0001" class="form-control" id="bomCantidad" required placeholder="Ej: 2.5">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Unidad de Medida</label>
+                  <select class="form-select" id="bomUnidad">
+                    <option value="">Sin unidad</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">% Desperdicio</label>
+                  <input type="number" step="0.01" min="0" max="100" class="form-control" id="bomDesperdicio" placeholder="Ej: 5.0" value="0">
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Costo Total por Unidad</label>
+                  <input type="text" class="form-control" id="bomCosto" readonly placeholder="Q0.00">
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Observaciones</label>
+                  <textarea class="form-control" id="bomObservaciones" rows="2" placeholder="Opcional"></textarea>
+                </div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" type="submit" id="btnGuardarBOM">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Agregar al BOM
+                  </button>
+                  <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-7">
+          <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Insumos en el BOM</h2>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-primary btn-sm" id="btnRecargarBOM">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+                    Recargar
+                  </button>
+                  <button class="btn btn-outline-info btn-sm" id="btnVerificarDisponibilidad">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    Verificar Stock
+                  </button>
+                </div>
+              </div>
+              <div class="table-responsive">
+                <table class="table align-middle" id="bomTable">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Insumo</th>
+                      <th>Código</th>
+                      <th class="text-end">Cantidad</th>
+                      <th class="text-center">% Desp.</th>
+                      <th class="text-end">Costo/Unidad</th>
+                      <th class="text-end">Costo Total</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                  <tfoot>
+                    <tr class="table-light">
+                      <td colspan="5" class="text-end fw-bold">Costo Total de Producción:</td>
+                      <td colspan="3" class="text-end fw-bold" id="costoTotalBOM">Q0.00</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="verificarStockModal" tabindex="-1" aria-labelledby="verificarStockModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #7B1114 0%, #D96B10 100%); color: white;">
+              <div class="d-flex align-items-center gap-3">
+                <img src="assets/img/logo.png" alt="Logo" class="sidebar-logo" onerror="this.style.display='none';" style="height: 40px; width: auto;">
+                <div>
+                  <h5 class="modal-title mb-0" id="verificarStockModalLabel">Verificación de Disponibilidad</h5>
+                  <small class="opacity-75">Insumos para producción</small>
+                </div>
+              </div>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label class="form-label">Cantidad a producir:</label>
+                <div class="input-group">
+                  <input type="number" step="1" min="1" class="form-control" id="cantidadVerificar" value="1" placeholder="Cantidad">
+                  <button class="btn btn-primary" type="button" id="btnEjecutarVerificacion">Verificar</button>
+                </div>
+              </div>
+              <div id="resultadoVerificacion" class="d-none">
+                <div class="table-responsive">
+                  <table class="table table-sm" id="tablaVerificacion">
+                    <thead>
+                      <tr>
+                        <th>Insumo</th>
+                        <th class="text-end">Requerido</th>
+                        <th class="text-end">Disponible</th>
+                        <th class="text-end">Faltante</th>
+                        <th class="text-center">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/bom.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

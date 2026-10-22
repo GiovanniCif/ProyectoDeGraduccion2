@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedidos | SGE PIERI DICACIO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+       <div class="sidebar-header">
+         <img src="assets/img/logo.png" alt="PIERI D'CACIO" class="sidebar-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="display:block;">
+         <div style="display:none;">
+           <h5 class="mb-0">SGE</h5>
+           <small>PIERI DICACIO</small>
+         </div>
+       </div>
+
+        <nav class="nav flex-column sidebar-nav">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="clientes.html">Clientes</a>
+          <a class="nav-link active" href="pedidos.html">Pedidos</a>
+          <a class="nav-link" href="pagos.html">Pagos</a>
+          <a class="nav-link" href="inventario.html">Inventario</a>
+          <a class="nav-link" href="bom.html">Lista de Materiales</a>
+          <a class="nav-link" href="produccion.html">Producción</a>
+          <a class="nav-link" href="empleados.html">Empleados</a>
+          <a class="nav-link" href="usuarios.html">Usuarios</a>
+          <a class="nav-link" href="reportes.html">Reportes</a>
+          <a class="nav-link" href="bitacora.html">Bitácora</a>
+        </nav>
+
+      <div class="sidebar-footer mt-auto">
+        <div class="small text-white-50 mb-2" id="userInfo">Usuario</div>
+        <button class="btn btn-outline-light btn-sm w-100" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h4 mb-1">Pedidos</h1>
+          <p class="text-muted mb-0">Gestión de pedidos y tablero Kanban</p>
+        </div>
+        <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">Menú</button>
+      </header>
+
+      <div id="pedidosAlert" class="alert d-none" role="alert"></div>
+
+      <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-outline-danger btn-sm" id="btnVerAlertas" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          Alertas de pedidos
+        </button>
+      </div>
+
+      <ul class="nav nav-tabs mb-4" id="pedidosTabs">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-nuevo" type="button" id="tabNuevoBtn">Nuevo Pedido</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-lista" type="button" id="tabListaBtn">Lista</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-kanban" type="button" id="tabKanbanBtn">Tablero Kanban</button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-nuevo">
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <input type="hidden" id="pedidoId" value="">
+              <h2 class="h5 mb-3" id="formTitlePedido">Nuevo pedido</h2>
+              <form id="pedidoForm" class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label">Cliente</label>
+                  <select class="form-select" id="idCliente" required></select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Estado pedido</label>
+                  <select class="form-select" id="idEstadoPedido" required></select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Departamento responsable</label>
+                  <select class="form-select" id="idDepartamentoResponsable"></select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Usuario responsable</label>
+                  <select class="form-select" id="idUsuarioResponsable"></select>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Fecha pedido</label>
+                  <input type="date" class="form-control" id="fechaPedido" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Fecha entrega</label>
+                  <input type="date" class="form-control" id="fechaEntrega" required>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Prioridad</label>
+                  <select class="form-select" id="prioridad">
+                    <option value="BAJA">BAJA</option>
+                    <option value="MEDIA" selected>MEDIA</option>
+                    <option value="ALTA">ALTA</option>
+                    <option value="URGENTE">URGENTE</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Descuento</label>
+                  <input type="number" step="0.01" min="0" class="form-control" id="descuento" value="0">
+                </div>
+
+                <div class="col-12"><hr></div>
+                <h6 class="text-muted">Detalle del pedido (prendas)</h6>
+
+                <div class="col-md-4">
+                  <label class="form-label">Producto terminado (opcional)</label>
+                  <select class="form-select" id="idProductoTerminado">
+                    <option value="">Seleccione producto o use los campos abajo</option>
+                  </select>
+                  <div class="form-text">Seleccione un producto para auto-completar los campos</div>
+                </div>
+                <div class="col-md-8"></div>
+                
+                <div class="col-md-3">
+                  <label class="form-label">Tipo prenda</label>
+                  <select class="form-select" id="idTipoPrenda"></select>
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Descripción</label>
+                  <input type="text" class="form-control" id="descripcionPrenda">
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Talla</label>
+                  <select class="form-select" id="idTalla"></select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Color</label>
+                  <select class="form-select" id="idColor"></select>
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Cantidad</label>
+                  <input type="number" step="0.01" min="1" class="form-control" id="cantidad" value="1">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label">Precio unitario</label>
+                  <input type="number" step="0.01" min="0" class="form-control" id="precioUnitario" value="0">
+                </div>
+                <div class="col-md-2">
+                  <label class="form-label">Subtotal</label>
+                  <div class="form-control-plaintext" id="subtotalDetalle">Q0.00</div>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                  <button type="button" class="btn btn-outline-primary w-100" id="btnAgregarDetalle">
+                    + Agregar
+                  </button>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Prendas agregadas:</label>
+                  <div class="table-responsive">
+                    <table class="table table-sm" id="detallesTable">
+                      <thead>
+                        <tr>
+                          <th>Prenda</th>
+                          <th>Talla</th>
+                          <th>Color</th>
+                          <th>Cant</th>
+                          <th>P.Unit</th>
+                          <th>Subtotal</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                      <tfoot>
+                        <tr class="table-light">
+                          <td colspan="5" class="text-end fw-bold">Subtotal:</td>
+                          <td class="fw-bold" id="subtotalPedido">Q0.00</td>
+                          <td></td>
+                        </tr>
+                        <tr class="table-light">
+                          <td colspan="5" class="text-end fw-bold">Descuento:</td>
+                          <td class="fw-bold text-danger" id="descuentoPedido">Q0.00</td>
+                          <td></td>
+                        </tr>
+                        <tr class="table-light">
+                          <td colspan="5" class="text-end fw-bold">Total:</td>
+                          <td class="fw-bold text-primary" id="totalPedido">Q0.00</td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Observaciones</label>
+                  <textarea class="form-control" id="observacionesPedido" rows="2"></textarea>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary" id="btnGuardarPedido">Guardar pedido</button>
+                  <button type="button" class="btn btn-outline-secondary" id="btnCancelarEdicionPedido" style="display:none;">Cancelar</button>
+                  <button type="button" class="btn btn-outline-secondary" onclick="resetPedidoForm()">Limpiar</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-lista">
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Listado de pedidos</h2>
+                <div class="d-flex gap-2">
+                  <input type="text" class="form-control form-control-sm" id="buscarPedido" placeholder="Buscar pedido...">
+                  <button class="btn btn-outline-primary btn-sm" id="btnRecargarPedidos">Recargar</button>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table align-middle" id="pedidosTable">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Número</th>
+                      <th>Cliente</th>
+                      <th>Estado</th>
+                      <th>Pedido</th>
+                      <th>Entrega</th>
+                      <th>Prioridad</th>
+                      <th>Total</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-kanban">
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="h5 mb-0">Tablero Kanban</h2>
+                <button class="btn btn-outline-primary btn-sm" id="btnRecargarKanban">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                  Recargar
+                </button>
+              </div>
+              
+              <p class="text-muted small mb-3">Arrastra las tarjetas entre columnas para cambiar el estado del pedido.</p>
+
+              <div class="kanban-container" id="kanbanBoard">
+                <div class="kanban-column column-registrado" data-estado="1" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 1)" ondragleave="handleDragLeave(event)">
+                  <div class="kanban-column-header">
+                    <span class="kanban-column-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      Registrado
+                    </span>
+                    <span class="kanban-badge" id="count-registrado">0</span>
+                  </div>
+                  <div class="kanban-column-body" id="col-registrado"></div>
+                </div>
+
+                <div class="kanban-column column-revision" data-estado="2" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 2)" ondragleave="handleDragLeave(event)">
+                  <div class="kanban-column-header">
+                    <span class="kanban-column-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                      En revisión
+                    </span>
+                    <span class="kanban-badge" id="count-revision">0</span>
+                  </div>
+                  <div class="kanban-column-body" id="col-revision"></div>
+                </div>
+
+                <div class="kanban-column column-produccion" data-estado="3" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 3)" ondragleave="handleDragLeave(event)">
+                  <div class="kanban-column-header">
+                    <span class="kanban-column-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                      En producción
+                    </span>
+                    <span class="kanban-badge" id="count-produccion">0</span>
+                  </div>
+                  <div class="kanban-column-body" id="col-produccion"></div>
+                </div>
+
+                <div class="kanban-column column-listo" data-estado="4" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 4)" ondragleave="handleDragLeave(event)">
+                  <div class="kanban-column-header">
+                    <span class="kanban-column-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                      Listo
+                    </span>
+                    <span class="kanban-badge" id="count-listo">0</span>
+                  </div>
+                  <div class="kanban-column-body" id="col-listo"></div>
+                </div>
+
+                <div class="kanban-column column-entregado" data-estado="5" ondragover="handleDragOver(event)" ondrop="handleDrop(event, 5)" ondragleave="handleDragLeave(event)">
+                  <div class="kanban-column-header">
+                    <span class="kanban-column-title">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                      Entregado
+                    </span>
+                    <span class="kanban-badge" id="count-entregado">0</span>
+                  </div>
+                  <div class="kanban-column-body" id="col-entregado"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     </main>
+   </div>
+
+   <div class="modal fade" id="pedidoDetailModal" tabindex="-1" aria-labelledby="pedidoDetailModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-xl modal-dialog-centered">
+       <div class="modal-content">
+         <div class="modal-header" style="background: linear-gradient(135deg, #7B1114 0%, #D96B10 100%); color: white;">
+           <div class="d-flex align-items-center gap-3">
+             <img src="assets/img/logo.png" alt="Logo" class="sidebar-logo" onerror="this.style.display='none';" style="height: 40px; width: auto;">
+             <div>
+               <h5 class="modal-title mb-0" id="pedidoDetailModalLabel">Detalle de Pedido</h5>
+               <small class="opacity-75">PIERI D'CACIO</small>
+             </div>
+           </div>
+           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body" id="pedidoDetailBody">
+         </div>
+         <div class="modal-footer justify-content-between">
+           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+           <button type="button" class="btn btn-primary" id="btnDescargarPDFPedido">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+             Descargar PDF
+           </button>
+         </div>
+       </div>
+     </div>
+   </div>
+
+   <div class="modal fade" id="pedidoAlertasModal" tabindex="-1" aria-labelledby="pedidoAlertasModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg modal-dialog-centered">
+       <div class="modal-content">
+         <div class="modal-header" style="background: linear-gradient(135deg, #7B1114 0%, #D96B10 100%); color: white;">
+           <h5 class="modal-title mb-0" id="pedidoAlertasModalLabel">
+             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+             Alertas de Pedidos
+           </h5>
+           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+           <div id="pedidoAlertasBody"></div>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+           <button type="button" class="btn btn-primary" id="btnRecargarAlertas">Recargar</button>
+         </div>
+       </div>
+     </div>
+   </div>
+
+   <div class="modal fade" id="pedidoHistorialModal" tabindex="-1" aria-labelledby="pedidoHistorialModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+       <div class="modal-content">
+         <div class="modal-header" style="background: linear-gradient(135deg, #7B1114 0%, #D96B10 100%); color: white;">
+           <h5 class="modal-title mb-0" id="pedidoHistorialModalLabel">Historial de estados</h5>
+           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body" id="pedidoHistorialBody"></div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+         </div>
+       </div>
+     </div>
+   </div>
+
+   <script src="assets/js/api.js"></script>
+   <script src="assets/js/app.js"></script>
+   <script src="assets/js/pedidos.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>

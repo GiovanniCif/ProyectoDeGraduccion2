@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagos | SGE PIERI DICACIO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+       <div class="sidebar-header">
+         <img src="assets/img/logo.png" alt="PIERI D'CACIO" class="sidebar-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="display:block;">
+         <div style="display:none;"><h5 class="mb-0">SGE</h5><small>PIERI DICACIO</small></div>
+       </div>
+        <nav class="nav flex-column sidebar-nav">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="clientes.html">Clientes</a>
+          <a class="nav-link" href="pedidos.html">Pedidos</a>
+          <a class="nav-link active" href="pagos.html">Pagos</a>
+          <a class="nav-link" href="inventario.html">Inventario</a>
+          <a class="nav-link" href="bom.html">Lista de Materiales</a>
+          <a class="nav-link" href="produccion.html">Producción</a>
+          <a class="nav-link" href="empleados.html">Empleados</a>
+          <a class="nav-link" href="usuarios.html">Usuarios</a>
+         <a class="nav-link" href="reportes.html">Reportes</a>
+         <a class="nav-link" href="bitacora.html">Bitácora</a>
+        </nav>
+      <div class="sidebar-footer mt-auto">
+        <div class="small text-white-50 mb-2" id="userInfo">Usuario</div>
+        <button class="btn btn-outline-light btn-sm w-100" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h4 mb-1">Pagos</h1>
+          <p class="text-muted mb-0">Registro de abonos y consulta de resumen financiero</p>
+        </div>
+        <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">Menú</button>
+      </header>
+
+      <div id="pagosAlert" class="alert d-none" role="alert"></div>
+
+      <div class="card shadow-sm border-0 rounded-4 mb-4">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Registrar pago</h2>
+          <form id="pagoForm" class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Pedido</label>
+              <select class="form-select" id="idPedido" required></select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Método de pago</label>
+              <select class="form-select" id="idMetodoPago" required></select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Usuario que registra</label>
+              <select class="form-select" id="idUsuario" required></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Fecha pago</label>
+              <input type="date" class="form-control" id="fechaPago" required>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Monto</label>
+              <input type="number" step="0.01" min="0.01" class="form-control" id="monto" required>
+            </div>
+              <div class="col-md-3">
+                <label class="form-label">No. referencia <span class="text-muted small">(opcional)</span></label>
+                <input type="text" class="form-control" id="numeroReferencia" placeholder="Ej: REC-001, cheque #123...">
+              </div>
+
+              <div class="col-md-9">
+                <label class="form-label">Voucher <span class="text-muted small">(opcional)</span></label>
+                
+                <ul class="nav nav-pills voucher-tabs mb-2" id="voucherTabs">
+                  <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-voucher-url" type="button">Usar URL</button>
+                  </li>
+                  <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-voucher-file" type="button">Subir archivo</button>
+                  </li>
+                </ul>
+
+                <div class="tab-content">
+                  <div class="tab-pane fade show active" id="tab-voucher-url">
+                    <div class="input-group">
+                      <input type="url" class="form-control" id="voucherUrl" placeholder="https://drive.google.com/... o URL de imagen">
+                      <button type="button" class="btn btn-outline-secondary" id="btnPreviewVoucher" title="Previsualizar">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      </button>
+                    </div>
+                    <small class="text-muted">Pega una URL de Drive, Dropbox, o imagen directa</small>
+                  </div>
+
+                  <div class="tab-pane fade" id="tab-voucher-file">
+                    <input type="file" id="voucherFileInput" class="file-input-hidden" accept="image/*,.pdf,.jpg,.jpeg,.png,.gif,.webp">
+                    
+                    <div id="dropzoneArea" class="dropzone">
+                      <div class="dropzone-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                      </div>
+                      <div class="dropzone-text">
+                        <strong>Arrastra aquí tu archivo</strong>
+                        <div class="dropzone-hint">
+                          o haz clic para <strong>buscar</strong><br>
+                          Formatos permitidos: JPG, PNG, GIF, PDF
+                        </div>
+                      </div>
+                    </div>
+
+                    <div id="filePreviewArea" class="mt-2" style="display: none;">
+                      <div class="file-preview-info">
+                        <div class="file-preview-icon">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                        </div>
+                        <div class="file-preview-details">
+                          <div class="file-preview-name" id="selectedFileName">-</div>
+                          <div class="file-preview-size" id="selectedFileSize">-</div>
+                        </div>
+                        <button type="button" class="btn btn-outline-danger file-remove-btn btn-sm" id="btnRemoveFile">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                      </div>
+                      <div id="imageFilePreview" class="mt-2 text-center" style="display: none;">
+                        <img id="filePreviewImage" src="" alt="Preview" class="file-preview-image">
+                      </div>
+                    </div>
+
+                    <small class="text-muted mt-2 d-block">
+                      <strong>Nota:</strong> El archivo se previsualizará localmente. Para guardarlo permanentemente, súbelo a Drive/Dropbox y usa la URL.
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <label class="form-label">Vista previa del voucher</label>
+                <div id="voucherPreview" class="border rounded-3 bg-light d-flex align-items-center justify-content-center" style="min-height: 100px;">
+                  <span class="text-muted small">Sin previsualización</span>
+                </div>
+              </div>
+            <div class="col-12">
+              <label class="form-label">Observaciones</label>
+              <textarea class="form-control" id="observacionesPago" rows="2"></textarea>
+            </div>
+            <div class="col-12 d-flex gap-2">
+              <button type="submit" class="btn btn-primary">Guardar pago</button>
+              <button type="button" class="btn btn-outline-primary" id="btnVerResumen">Ver resumen</button>
+              <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-12 col-xl-5">
+          <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-body">
+              <h2 class="h5 mb-3">Resumen del pedido seleccionado</h2>
+              <div id="resumenPagoVacio" class="text-muted">Selecciona un pedido y presiona "Ver resumen".</div>
+              <div id="resumenPagoBox" class="d-none">
+                <div class="summary-grid">
+                  <div><span>Número</span><strong id="resNumeroPedido">-</strong></div>
+                  <div><span>Total pedido</span><strong id="resTotalPedido">Q0.00</strong></div>
+                  <div><span>Total pagado</span><strong id="resTotalPagado">Q0.00</strong></div>
+                  <div><span>Saldo pendiente</span><strong id="resSaldoPendiente">Q0.00</strong></div>
+                  <div><span>Estado</span><strong id="resEstadoFinanciero">-</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-xl-7">
+          <div class="card shadow-sm border-0 rounded-4 h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="h5 mb-0">Pagos del pedido</h2>
+                <button class="btn btn-outline-primary btn-sm" id="btnRecargarPagos">Recargar</button>
+              </div>
+               <div class="table-responsive">
+                 <table class="table align-middle" id="pagosTable">
+                   <thead>
+                     <tr>
+                       <th>ID</th>
+                       <th>Pedido</th>
+                       <th>Cliente</th>
+                       <th>Método</th>
+                       <th>Fecha</th>
+                       <th>Monto</th>
+                       <th>Referencia</th>
+                       <th>Registrado por</th>
+                     </tr>
+                   </thead>
+                   <tbody></tbody>
+                 </table>
+               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+     </main>
+   </div>
+
+   <div class="modal fade" id="pagoDetailModal" tabindex="-1" aria-labelledby="pagoDetailModalLabel" aria-hidden="true">
+     <div class="modal-dialog modal-lg modal-dialog-centered">
+       <div class="modal-content">
+         <div class="modal-header" style="background: linear-gradient(135deg, #7B1114 0%, #D96B10 100%); color: white;">
+           <div class="d-flex align-items-center gap-3">
+             <img src="assets/img/logo.png" alt="Logo" class="sidebar-logo" onerror="this.style.display='none';" style="height: 40px; width: auto;">
+             <div>
+               <h5 class="modal-title mb-0" id="pagoDetailModalLabel">Detalle de Pago</h5>
+               <small class="opacity-75">PIERI D'CACIO</small>
+             </div>
+           </div>
+           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body" id="pagoDetailBody">
+         </div>
+         <div class="modal-footer justify-content-between">
+           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+           <button type="button" class="btn btn-primary" id="btnDescargarPDF">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+             Descargar PDF
+           </button>
+         </div>
+       </div>
+     </div>
+   </div>
+
+   <script src="assets/js/api.js"></script>
+   <script src="assets/js/app.js"></script>
+   <script src="assets/js/pagos.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

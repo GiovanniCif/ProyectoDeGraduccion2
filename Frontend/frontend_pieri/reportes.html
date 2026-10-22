@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reportes | SGE PIERI DICACIO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="assets/img/logo.png" alt="PIERI D'CACIO" class="sidebar-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="display:block;">
+        <div style="display:none;"><h5 class="mb-0">SGE</h5><small>PIERI DICACIO</small></div>
+      </div>
+      <nav class="nav flex-column sidebar-nav">
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="clientes.html">Clientes</a>
+        <a class="nav-link" href="pedidos.html">Pedidos</a>
+        <a class="nav-link" href="pagos.html">Pagos</a>
+        <a class="nav-link" href="inventario.html">Inventario</a>
+        <a class="nav-link" href="bom.html">Lista de Materiales</a>
+        <a class="nav-link" href="produccion.html">Producción</a>
+        <a class="nav-link" href="empleados.html">Empleados</a>
+        <a class="nav-link" href="usuarios.html">Usuarios</a>
+        <a class="nav-link active" href="reportes.html">Reportes</a>
+        <a class="nav-link" href="bitacora.html">Bitácora</a>
+      </nav>
+      <div class="sidebar-footer mt-auto">
+        <div class="small text-white-50 mb-2" id="userInfo">Usuario</div>
+        <button class="btn btn-outline-light btn-sm w-100" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h4 mb-1">Reportes</h1>
+          <p class="text-muted mb-0">Consulte y exporte a Excel los reportes del sistema</p>
+        </div>
+        <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">Menú</button>
+      </header>
+
+      <div id="reportesAlert" class="alert d-none" role="alert"></div>
+
+      <ul class="nav nav-pills mb-3" id="reportesTab" role="tablist">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-pedidos" type="button">Pedidos</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-pagos" type="button">Pagos</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-productos" type="button">Productos terminados</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-insumos" type="button">Insumos</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-asistencias" type="button">Asistencias</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-resumen-asistencias" type="button">Resumen asistencia</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-pagos-cliente" type="button">Pagos por cliente</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-cuentas-cobrar" type="button">Cuentas por cobrar</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-ingresos" type="button">Ingresos por período</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-pagos-vencidos" type="button">Pagos vencidos</button></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-pedidos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-3"><label class="form-label">Desde</label><input type="date" class="form-control" id="pedDesde"></div>
+                <div class="col-md-3"><label class="form-label">Hasta</label><input type="date" class="form-control" id="pedHasta"></div>
+                <div class="col-md-3"><label class="form-label">Estado</label><select class="form-select" id="pedEstado"></select></div>
+                <div class="col-md-3"><label class="form-label">Prioridad</label><select class="form-select" id="pedPrioridad"></select></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarPedidos" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarPedidos" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="pedidosTable">
+                  <thead><tr><th>N°</th><th>Número</th><th>Cliente</th><th>Estado</th><th>Fecha pedido</th><th>Fecha entrega</th><th>Prioridad</th><th class="text-end">Total</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-pagos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-3"><label class="form-label">Desde</label><input type="date" class="form-control" id="pagDesde"></div>
+                <div class="col-md-3"><label class="form-label">Hasta</label><input type="date" class="form-control" id="pagHasta"></div>
+                <div class="col-md-3"><label class="form-label">Método de pago</label><select class="form-select" id="pagMetodo"></select></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarPagos" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarPagos" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="pagosTable">
+                  <thead><tr><th>ID</th><th>Pedido</th><th>Cliente</th><th>Método</th><th>Fecha pago</th><th class="text-end">Monto</th><th>Referencia</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-productos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-4"><label class="form-label">Tipo de prenda</label><select class="form-select" id="prodTipoPrenda"></select></div>
+                <div class="col-md-4"><label class="form-label">Solo stock bajo</label><select class="form-select" id="prodSoloStockBajo"><option value="">Todos</option><option value="true">Sí</option><option value="false">No</option></select></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarProductos" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarProductos" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="productosTable">
+                  <thead><tr><th>ID</th><th>Código</th><th>Nombre</th><th>Tipo</th><th>Talla</th><th>Color</th><th class="text-end">Stock</th><th class="text-end">Mínimo</th><th class="text-end">Precio</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-insumos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-4"><label class="form-label">Categoría</label><input type="text" class="form-control" id="insCategoria" placeholder="Ej: Tela, Hilo"></div>
+                <div class="col-md-4"><label class="form-label">Solo stock bajo</label><select class="form-select" id="insSoloStockBajo"><option value="">Todos</option><option value="true">Sí</option><option value="false">No</option></select></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarInsumos" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarInsumos" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="insumosTable">
+                  <thead><tr><th>ID</th><th>Código</th><th>Nombre</th><th>Categoría</th><th>Unidad</th><th class="text-end">Stock</th><th class="text-end">Mínimo</th><th class="text-end">Costo</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-asistencias">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-3"><label class="form-label">Desde</label><input type="date" class="form-control" id="asistDesde"></div>
+                <div class="col-md-3"><label class="form-label">Hasta</label><input type="date" class="form-control" id="asistHasta"></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarAsistencias" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarAsistencias" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="asistenciasTable">
+                  <thead><tr><th>ID</th><th>Empleado</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th class="text-end">Tardanza</th><th class="text-end">Horas</th><th>Observaciones</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-resumen-asistencias">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-3"><label class="form-label">Año</label><select class="form-select" id="resAnio"></select></div>
+                <div class="col-md-3"><label class="form-label">Mes</label><select class="form-select" id="resMes"></select></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarResumenAsistencias" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarResumenAsistencias" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="resumenAsistenciasTable">
+                  <thead><tr><th>ID</th><th>Empleado</th><th>Departamento</th><th>Puesto</th><th class="text-end">Días hábiles</th><th class="text-end">Días trabajados</th><th class="text-end">Faltas</th><th class="text-end">Tardanzas</th><th class="text-end">Min. tardanza</th><th class="text-end">Total horas</th><th class="text-end">Horas extras</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-pagos-cliente">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-3"><label class="form-label">Desde</label><input type="date" class="form-control" id="pgcDesde"></div>
+                <div class="col-md-3"><label class="form-label">Hasta</label><input type="date" class="form-control" id="pgcHasta"></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarPagosCliente" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarPagosCliente" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="pagosClienteTable">
+                  <thead><tr><th>ID</th><th>Cliente</th><th class="text-end">Cantidad de pagos</th><th class="text-end">Total pagado</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-cuentas-cobrar">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-8"><p class="text-muted mb-0">Pedidos con saldo pendiente de cobro.</p></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarCuentasCobrar" type="button">Consultar</button>
+                  <button class="btn btn-success" id="btnExportarCuentasCobrar" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="cuentasCobrarTable">
+                  <thead><tr><th>ID</th><th>Número</th><th>Cliente</th><th class="text-end">Total pedido</th><th class="text-end">Total pagado</th><th class="text-end">Saldo pendiente</th><th>Fecha entrega</th><th>Estado financiero</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-ingresos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-3"><label class="form-label">Desde</label><input type="date" class="form-control" id="ingDesde"></div>
+                <div class="col-md-3"><label class="form-label">Hasta</label><input type="date" class="form-control" id="ingHasta"></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarIngresos" type="button">Filtrar</button>
+                  <button class="btn btn-success" id="btnExportarIngresos" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="ingresosTable">
+                  <thead><tr><th>Fecha</th><th class="text-end">Cantidad de pagos</th><th class="text-end">Monto</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-pagos-vencidos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <form class="row g-3 align-items-end" onsubmit="return false;">
+                <div class="col-md-8"><p class="text-muted mb-0">Pedidos con saldo pendiente y entrega vencida.</p></div>
+                <div class="col-12 d-flex gap-2">
+                  <button class="btn btn-primary" id="btnFiltrarPagosVencidos" type="button">Consultar</button>
+                  <button class="btn btn-success" id="btnExportarPagosVencidos" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Exportar Excel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table align-middle" id="pagosVencidosTable">
+                  <thead><tr><th>ID</th><th>Número</th><th>Cliente</th><th>Estado</th><th class="text-end">Total pedido</th><th class="text-end">Total pagado</th><th class="text-end">Saldo pendiente</th><th>Fecha entrega</th><th class="text-end">Días de atraso</th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/reportes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

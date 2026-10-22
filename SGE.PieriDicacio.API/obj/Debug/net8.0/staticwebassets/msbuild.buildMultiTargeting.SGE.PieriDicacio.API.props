@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SGE.PieriDicacio.API.props" />
+</Project>

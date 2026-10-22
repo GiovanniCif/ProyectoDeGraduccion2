@@ -1,0 +1,29 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\uploads\\vouchers\\20260524224905664_33f44b0b1cd34c7e9573f9be8a199ab8.png",
+      "PackagePath": "staticwebassets\\uploads\\vouchers\\20260524224905664_33f44b0b1cd34c7e9573f9be8a199ab8.png"
+    },
+    {
+      "Id": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\uploads\\vouchers\\20260530175218901_a17e86145c6645c3b7a9f8b71f829979.png",
+      "PackagePath": "staticwebassets\\uploads\\vouchers\\20260530175218901_a17e86145c6645c3b7a9f8b71f829979.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SGE.PieriDicacio.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.SGE.PieriDicacio.API.props",
+      "PackagePath": "build\\SGE.PieriDicacio.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.SGE.PieriDicacio.API.props",
+      "PackagePath": "buildMultiTargeting\\SGE.PieriDicacio.API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.SGE.PieriDicacio.API.props",
+      "PackagePath": "buildTransitive\\SGE.PieriDicacio.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

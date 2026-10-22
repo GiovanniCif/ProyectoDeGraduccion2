@@ -1,0 +1,6 @@
+@SGE.PieriDicacio.API_HostAddress = http://localhost:5296
+
+GET {{SGE.PieriDicacio.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

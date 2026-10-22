@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Empleados | SGE PIERI DICACIO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+       <div class="sidebar-header">
+         <img src="assets/img/logo.png" alt="PIERI D'CACIO" class="sidebar-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" style="display:block;">
+         <div style="display:none;"><h5 class="mb-0">SGE</h5><small>PIERI DICACIO</small></div>
+       </div>
+        <nav class="nav flex-column sidebar-nav">
+          <a class="nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-link" href="clientes.html">Clientes</a>
+          <a class="nav-link" href="pedidos.html">Pedidos</a>
+          <a class="nav-link" href="pagos.html">Pagos</a>
+          <a class="nav-link" href="inventario.html">Inventario</a>
+          <a class="nav-link" href="bom.html">Lista de Materiales</a>
+          <a class="nav-link" href="produccion.html">Producción</a>
+          <a class="nav-link active" href="empleados.html">Empleados</a>
+          <a class="nav-link" href="usuarios.html">Usuarios</a>
+         <a class="nav-link" href="reportes.html">Reportes</a>
+         <a class="nav-link" href="bitacora.html">Bitácora</a>
+        </nav>
+      <div class="sidebar-footer mt-auto">
+        <div class="small text-white-50 mb-2" id="userInfo">Usuario</div>
+        <button class="btn btn-outline-light btn-sm w-100" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="h4 mb-1">Empleados</h1>
+          <p class="text-muted mb-0">Gestión de personal, asistencia y permisos</p>
+        </div>
+        <button class="btn btn-outline-primary d-lg-none" id="btnToggleSidebar">Menú</button>
+      </header>
+
+      <div id="empleadosAlert" class="alert d-none" role="alert"></div>
+
+      <ul class="nav nav-pills mb-3">
+        <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-empleados" type="button">Empleados</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-asistencias" type="button">Asistencias</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-permisos" type="button">Permisos</button></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane fade show active" id="tab-empleados">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <h2 class="h5 mb-3">Nuevo empleado</h2>
+              <form id="empleadoForm" class="row g-3">
+                <div class="col-md-3"><label class="form-label">Departamento</label><select class="form-select" id="empDepartamento" required></select></div>
+                <div class="col-md-3"><label class="form-label">Nombres</label><input class="form-control" id="empNombres" required></div>
+                <div class="col-md-3"><label class="form-label">Apellidos</label><input class="form-control" id="empApellidos" required></div>
+                <div class="col-md-3"><label class="form-label">Puesto</label><input class="form-control" id="empPuesto"></div>
+                <div class="col-md-3"><label class="form-label">DPI</label><input class="form-control" id="empDpi"></div>
+                <div class="col-md-3"><label class="form-label">Teléfono</label><input class="form-control" id="empTelefono"></div>
+                <div class="col-md-3"><label class="form-label">Correo</label><input type="email" class="form-control" id="empCorreo"></div>
+                <div class="col-md-3"><label class="form-label">Fecha ingreso</label><input type="date" class="form-control" id="empFechaIngreso" required></div>
+                 <input type="hidden" id="empleadoId" value="">
+                 <div class="col-12"><label class="form-label">Dirección</label><input class="form-control" id="empDireccion"></div>
+                 <div class="col-12 d-flex gap-2">
+                   <button class="btn btn-primary" type="submit" id="btnGuardarEmpleado">Guardar empleado</button>
+                   <button type="button" class="btn btn-outline-secondary" id="btnCancelarEdicionEmp" style="display:none;">Cancelar</button>
+                   <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+                 </div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+               <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h5 mb-0">Listado de empleados</h2><button class="btn btn-outline-primary btn-sm" id="btnRecargarEmpleados">Recargar</button></div>
+               <div class="table-responsive"><table class="table align-middle" id="empleadosTable"><thead><tr><th>ID</th><th>Empleado</th><th>Departamento</th><th>Puesto</th><th>Correo</th><th>Estado</th><th>Acciones</th></tr></thead><tbody></tbody></table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-asistencias">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <h2 class="h5 mb-3">Registrar asistencia</h2>
+              <form id="asistenciaForm" class="row g-3">
+                <div class="col-md-4"><label class="form-label">Empleado</label><select class="form-select" id="asisEmpleado" required></select></div>
+                <div class="col-md-4"><label class="form-label">Usuario registro</label><select class="form-select" id="asisUsuario" required></select></div>
+                <div class="col-md-4"><label class="form-label">Fecha</label><input type="date" class="form-control" id="asisFecha" required></div>
+                <div class="col-md-3"><label class="form-label">Hora entrada</label><input type="time" class="form-control" id="asisHoraEntrada"></div>
+                <div class="col-md-3"><label class="form-label">Hora salida</label><input type="time" class="form-control" id="asisHoraSalida"></div>
+                <div class="col-12"><label class="form-label">Observaciones</label><textarea class="form-control" id="asisObservaciones" rows="2"></textarea></div>
+                <div class="col-12"><button class="btn btn-outline-primary" type="submit">Guardar asistencia</button></div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h5 mb-0">Asistencias</h2><button class="btn btn-outline-primary btn-sm" id="btnRecargarAsistencias">Recargar</button></div>
+              <div class="table-responsive"><table class="table align-middle" id="asistenciasTable"><thead><tr><th>ID</th><th>Empleado</th><th>Fecha</th><th>Entrada</th><th>Salida</th><th>Tardanza</th><th>Horas</th></tr></thead><tbody></tbody></table></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade" id="tab-permisos">
+          <div class="card shadow-sm border-0 rounded-4 mb-4">
+            <div class="card-body">
+              <h2 class="h5 mb-3">Registrar permiso</h2>
+              <form id="permisoForm" class="row g-3">
+                <div class="col-md-4"><label class="form-label">Empleado</label><select class="form-select" id="permEmpleado" required></select></div>
+                <div class="col-md-4"><label class="form-label">Tipo permiso</label><select class="form-select" id="permTipo" required></select></div>
+                <div class="col-md-4"><label class="form-label">Autorizado por</label><select class="form-select" id="permAutorizadoPor"></select></div>
+                <div class="col-md-3"><label class="form-label">Fecha inicio</label><input type="date" class="form-control" id="permFechaInicio" required></div>
+                <div class="col-md-3"><label class="form-label">Fecha fin</label><input type="date" class="form-control" id="permFechaFin" required></div>
+                <div class="col-md-6"><label class="form-label">Documento URL</label><input class="form-control" id="permDocumentoUrl"></div>
+                <div class="col-12"><label class="form-label">Motivo</label><textarea class="form-control" id="permMotivo" rows="2" required></textarea></div>
+                <div class="col-12"><button class="btn btn-outline-primary" type="submit">Guardar permiso</button></div>
+              </form>
+            </div>
+          </div>
+          <div class="card shadow-sm border-0 rounded-4">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3"><h2 class="h5 mb-0">Permisos</h2><button class="btn btn-outline-primary btn-sm" id="btnRecargarPermisos">Recargar</button></div>
+              <div class="table-responsive"><table class="table align-middle" id="permisosTable"><thead><tr><th>ID</th><th>Empleado</th><th>Tipo</th><th>Inicio</th><th>Fin</th><th>Motivo</th><th>Estado</th></tr></thead><tbody></tbody></table></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/empleados.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

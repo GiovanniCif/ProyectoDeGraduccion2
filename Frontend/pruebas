@@ -1,0 +1,12 @@
+var resultado = await ObtenerReportePedidosAsync(desde, hasta, idEstado, prioridad);
+if (!resultado.Success)
+    return Result<ExportResultDto>.Fail(resultado.Error ?? "Error al generar el reporte");
+
+var tabla = new List<object[]> { new object[] { "N°", "Número", "Cliente", "Estado", "Fecha pedido", "Fecha entrega", "Prioridad", "Total (Q)" } };
+foreach (var r in resultado.Data!)
+{
+    tabla.Add(new object[] { r.Id, r.NumeroPedido, r.Cliente, r.EstadoPedido, r.FechaPedido, r.FechaEntrega, r.Prioridad, r.Total });
+}
+
+return Result<ExportResultDto>.Ok(ExcelHelper.CrearLibro("Reporte de Pedidos", tabla, "Pedidos"));
+

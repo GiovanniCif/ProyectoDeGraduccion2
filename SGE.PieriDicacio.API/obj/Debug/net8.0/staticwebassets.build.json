@@ -1,0 +1,58 @@
+{
+  "Version": 1,
+  "Hash": "jtNfk6JGwhUngISwGuC7MYxtDITemKHg7hNP9Nhutwc=",
+  "Source": "SGE.PieriDicacio.API",
+  "BasePath": "_content/SGE.PieriDicacio.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "SGE.PieriDicacio.API\\wwwroot",
+      "Source": "SGE.PieriDicacio.API",
+      "ContentRoot": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\",
+      "BasePath": "_content/SGE.PieriDicacio.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\uploads\\vouchers\\20260524224905664_33f44b0b1cd34c7e9573f9be8a199ab8.png",
+      "SourceId": "SGE.PieriDicacio.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\",
+      "BasePath": "_content/SGE.PieriDicacio.API",
+      "RelativePath": "uploads/vouchers/20260524224905664_33f44b0b1cd34c7e9573f9be8a199ab8.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\vouchers\\20260524224905664_33f44b0b1cd34c7e9573f9be8a199ab8.png"
+    },
+    {
+      "Identity": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\uploads\\vouchers\\20260530175218901_a17e86145c6645c3b7a9f8b71f829979.png",
+      "SourceId": "SGE.PieriDicacio.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\HP\\OneDrive\\Documentos\\U segundo semestre 2026\\proyecto\\SGE.PieriDicacio.API\\wwwroot\\",
+      "BasePath": "_content/SGE.PieriDicacio.API",
+      "RelativePath": "uploads/vouchers/20260530175218901_a17e86145c6645c3b7a9f8b71f829979.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\vouchers\\20260530175218901_a17e86145c6645c3b7a9f8b71f829979.png"
+    }
+  ]
+}
